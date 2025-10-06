@@ -1,3 +1,5 @@
+const GITHUB_TOKEN = '<<GITHUB_TOKEN>>';
+
 function triggerGitHubAction(repoOwner, repoName, eventType) {
   const url = `https://api.github.com/repos/${repoOwner}/${repoName}/dispatches`;
 
@@ -10,7 +12,7 @@ function triggerGitHubAction(repoOwner, repoName, eventType) {
     method: 'POST',
     contentType: 'application/json',
     headers: {
-      Authorization: 'Bearer ' + PropertiesService.getScriptProperties().getProperty('GITHUB_TOKEN'),
+      Authorization: 'Bearer ' + GITHUB_TOKEN,
       Accept: 'application/vnd.github+json'
     },
     payload: JSON.stringify(payload),
