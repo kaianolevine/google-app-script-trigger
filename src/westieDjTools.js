@@ -1,4 +1,5 @@
 const GITHUB_TOKEN = ''; // create a fine-scoped token
+const FOLDER_ID = ''; // Google Drive folder ID to monitor
 const REPO_OWNER = 'kaianolevine';
 const REPO_NAME = 'westie-dj-tools';
 const EVENT_TYPE = 'drive-change';
@@ -6,7 +7,7 @@ const EVENT_TYPE = 'drive-change';
 //testing commit here
 
 function monitorDriveFolderAndTriggerGitHub() {
-  const folder = DriveApp.getFolderById('');
+  const folder = DriveApp.getFolderById(FOLDER_ID);
   const files = folder.getFiles();
   const props = PropertiesService.getScriptProperties();
   const previousSnapshot = JSON.parse(props.getProperty('fileSnapshot') || '{}');
