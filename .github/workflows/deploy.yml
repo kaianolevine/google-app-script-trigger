@@ -38,6 +38,25 @@ jobs:
       - name: Push to Apps Script
         run: clasp push --force
 
-      - name: Set GitHub token in Apps Script properties
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Get access token
+        id: auth
         run: |
-          clasp run setGitHubToken -p '["${{ secrets.GAS_GITHUB_TOKEN }}"]'
+          ACCESS_TOKEN=$(gcloud auth print-access-token)
+          echo "token=$ACCESS_TOKEN" >> $GITHUB_OUTPUT
+
+      - name: Set GITHUB_TOKEN property in Apps Script
+        run: |
+          curl -X PUT \
+            -H "Authorization: Bearer ${{ steps.auth.outputs.token }}" \
+            -H "Content-Type: application/json" \
+            "https://script.googleapis.com/v1/projects/141P-4LIY2KuL1rwIamUUk8I2aL1g0xaKJikybLtHQ4ceBfH65Uvlu7jX/properties" \
+            -d '{
+              "properties": {
+                "GITHUB_TOKEN": "'"${{ secrets.GH_TOKEN }}"'"
+              }
+            }'

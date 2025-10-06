@@ -10,7 +10,7 @@ function triggerGitHubAction(repoOwner, repoName, eventType) {
     method: 'POST',
     contentType: 'application/json',
     headers: {
-      Authorization: 'Bearer ' + PropertiesService.getScriptProperties().getProperty('GAS_GITHUB_TOKEN'),
+      Authorization: 'Bearer ' + PropertiesService.getScriptProperties().getProperty('GITHUB_TOKEN'),
       Accept: 'application/vnd.github+json'
     },
     payload: JSON.stringify(payload),
