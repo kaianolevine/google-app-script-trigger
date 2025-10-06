@@ -37,3 +37,7 @@ jobs:
 
       - name: Push to Apps Script
         run: clasp push --force
+
+      - name: Set GitHub token in Apps Script properties
+        run: |
+          clasp run setGitHubToken -p '["${{ secrets.GAS_GITHUB_TOKEN }}"]'
