@@ -22,8 +22,18 @@ jobs:
 
       - name: Authenticate clasp
         run: |
-          echo "${{ secrets.CLASP_CREDENTIALS }}" > ~/.clasprc.json
-          echo "${{ secrets.CLASP_PROJECT }}" > .clasp.json
+          cat << 'EOF' > ~/.clasprc.json
+          ${{ secrets.CLASP_CREDENTIALS }}
+          EOF
+
+          cat << 'EOF' > .clasp.json
+          ${{ secrets.CLASP_PROJECT }}
+          EOF
+
+      - name: Debug JSON
+        run: |
+          cat ~/.clasprc.json
+          cat .clasp.json
 
       - name: Push to Apps Script
         run: clasp push --force
