@@ -37,6 +37,3 @@ jobs:
 
       - name: Push to Apps Script
         run: clasp push --force
-
-      - name: Install triggers
-        run: clasp run setupTriggers
