@@ -7,6 +7,6 @@ const EXCLUDED_FILES = [ // List of files to exclude (can be by name or by ID)
     "1DPAfsNqOBGw6pFNCt_Y5rVAv3WGv0vzmrxw1Cw9AdHg"   // DJ Set Collection
 ];
 
-function newCsvDjSets() {
+function updatedDjSets() {
     monitorDriveFolderAndTriggerGitHub(FOLDER_ID, EXCLUDED_FILES, SNAPSHOT_PROPERTY_NAME, REPO_OWNER, REPO_NAME, EVENT_TYPE);
 }
