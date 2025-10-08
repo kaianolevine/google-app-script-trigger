@@ -3,7 +3,11 @@ const SNAPSHOT_PROPERTY_NAME = 'vdjHistorySnapshot'; //Unique Snapshot Property 
 const REPO_OWNER = 'kaianolevine'; //GitHub Repo Owner
 const REPO_NAME = 'combined-tools-sandbox'; //Github Repo Name
 const EVENT_TYPE = 'vdj_history'; //event_type for GitHub 'repository_dispatch'
+const EXCLUDED_FILES = [ // List of files to exclude (can be by name or by ID)
+//"ignore-me.txt",         // by file name
+//"1DPAfsNqOBGw6pFNCt_Y5rVAv3WGv0vzmrxw1Cw9AdHg"   // or by file ID
+];
 
 function vdjMusicHistory() {
-    monitorDriveFolderAndTriggerGitHub(FOLDER_ID, SNAPSHOT_PROPERTY_NAME, REPO_OWNER, REPO_NAME, EVENT_TYPE); 
+    monitorDriveFolderAndTriggerGitHub(FOLDER_ID, EXCLUDED_FILES, SNAPSHOT_PROPERTY_NAME, REPO_OWNER, REPO_NAME, EVENT_TYPE); 
 }
