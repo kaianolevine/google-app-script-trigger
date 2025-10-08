@@ -1,4 +1,4 @@
-function monitorDriveFolderAndTriggerGitHub(folderId, excludedFiles, snapshotPropertyName, repoOwner, repoName, eventType) {
+function monitorDriveFolderAndTriggerGitHub(folderId, excludedFiles, checkSubfolders, snapshotPropertyName, repoOwner, repoName, eventType) {
   const props = PropertiesService.getScriptProperties();
   const previousSnapshot = JSON.parse(props.getProperty(snapshotPropertyName) || '{}');
   const currentSnapshot = {};
@@ -51,8 +51,10 @@ function monitorDriveFolderAndTriggerGitHub(folderId, excludedFiles, snapshotPro
         changed = true;
       }
 
-      // Recursively traverse this subfolder
-      traverseFolder(sub);
+      // Recursively traverse this subfolder only if checkSubfolders is true
+      if (checkSubfolders) {
+        traverseFolder(sub);
+      }
     }
   }
 

@@ -7,5 +7,5 @@ function newCsvDjSets() {
     const EXCLUDED_FILES = [ // List of files to exclude (can be by name or by ID)
         ""
     ];
-    monitorDriveFolderAndTriggerGitHub(FOLDER_ID, EXCLUDED_FILES, SNAPSHOT_PROPERTY_NAME, REPO_OWNER, REPO_NAME, EVENT_TYPE);
+    monitorDriveFolderAndTriggerGitHub(FOLDER_ID, EXCLUDED_FILES, true, SNAPSHOT_PROPERTY_NAME, REPO_OWNER, REPO_NAME, EVENT_TYPE);
 }

@@ -9,5 +9,5 @@ function vdjMusicHistory() {
         //"ignore-me.txt",         // by file name
         //"1DPAfsNqOBGw6pFNCt_Y5rVAv3WGv0vzmrxw1Cw9AdHg"   // or by file ID
     ];
-    monitorDriveFolderAndTriggerGitHub(FOLDER_ID, EXCLUDED_FILES, SNAPSHOT_PROPERTY_NAME, REPO_OWNER, REPO_NAME, EVENT_TYPE);
+    monitorDriveFolderAndTriggerGitHub(FOLDER_ID, EXCLUDED_FILES, false, SNAPSHOT_PROPERTY_NAME, REPO_OWNER, REPO_NAME, EVENT_TYPE);
 }
