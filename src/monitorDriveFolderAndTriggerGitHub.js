@@ -1,50 +1,63 @@
 function monitorDriveFolderAndTriggerGitHub(folderId, excludedFiles, snapshotPropertyName, repoOwner, repoName, eventType) {
-  const folder = DriveApp.getFolderById(folderId);
-  const files = folder.getFiles();
-  const subfolders = folder.getFolders();
   const props = PropertiesService.getScriptProperties();
   const previousSnapshot = JSON.parse(props.getProperty(snapshotPropertyName) || '{}');
   const currentSnapshot = {};
 
   let changed = false;
 
-  // Track files
-  while (files.hasNext()) {
-    const file = files.next();
-    const id = file.getId();
-    const name = file.getName();
+  function traverseFolder(folder) {
+    const files = folder.getFiles();
+    const subfolders = folder.getFolders();
 
-    // Skip if file is in the exclusion list
-    if (excludeFiles.includes(name) || excludeFiles.includes(id)) {
-      continue;
+    // Track files
+    while (files.hasNext()) {
+      const file = files.next();
+      const id = file.getId();
+      const name = file.getName();
+
+      // Skip if file is in the exclusion list
+      if (excludedFiles.includes(name) || excludedFiles.includes(id)) {
+        continue;
+      }
+
+      const modTime = file.getLastUpdated().getTime();
+      const size = file.getSize();
+
+      currentSnapshot[id] = { type: 'file', name, modTime, size };
+
+      if (
+        !previousSnapshot[id] ||
+        previousSnapshot[id].modTime !== modTime ||
+        previousSnapshot[id].size !== size
+      ) {
+        changed = true;
+      }
     }
 
-    const modTime = file.getLastUpdated().getTime();
-    const size = file.getSize();
+    // Track subfolders
+    while (subfolders.hasNext()) {
+      const sub = subfolders.next();
+      const id = sub.getId();
+      const name = sub.getName();
 
-    currentSnapshot[id] = { type: 'file', name, modTime, size };
+      // Skip if folder is in the exclusion list
+      if (excludedFiles.includes(name) || excludedFiles.includes(id)) {
+        continue;
+      }
 
-    if (
-      !previousSnapshot[id] ||
-      previousSnapshot[id].modTime !== modTime ||
-      previousSnapshot[id].size !== size
-    ) {
-      changed = true;
+      currentSnapshot[id] = { type: 'folder', name };
+
+      if (!previousSnapshot[id] || previousSnapshot[id].name !== name) {
+        changed = true;
+      }
+
+      // Recursively traverse this subfolder
+      traverseFolder(sub);
     }
   }
 
-  // Track subfolders
-  while (subfolders.hasNext()) {
-    const sub = subfolders.next();
-    const id = sub.getId();
-    const name = sub.getName();
-
-    currentSnapshot[id] = { type: 'folder', name };
-
-    if (!previousSnapshot[id] || previousSnapshot[id].name !== name) {
-      changed = true;
-    }
-  }
+  const rootFolder = DriveApp.getFolderById(folderId);
+  traverseFolder(rootFolder);
 
   // Check for removed items
   for (let id in previousSnapshot) {
@@ -52,7 +65,7 @@ function monitorDriveFolderAndTriggerGitHub(folderId, excludedFiles, snapshotPro
   }
 
   if (changed) {
-    const folderName = folder.getName();
+    const folderName = rootFolder.getName();
     Logger.log(`🟡 Change detected in folder "${folderName}" — triggering GitHub Action...`);
     triggerGitHubAction(repoOwner, repoName, eventType);
     props.setProperty(snapshotPropertyName, JSON.stringify(currentSnapshot));
