@@ -6,8 +6,6 @@ function vdjMusicHistory() {
     const EVENT_TYPE = 'vdj_history'; //event_type for GitHub 'repository_dispatch'
     const EXCLUDED_FILES = [ // List of files to exclude (can be by name or by ID)
         ""
-        //"ignore-me.txt",         // by file name
-        //"1DPAfsNqOBGw6pFNCt_Y5rVAv3WGv0vzmrxw1Cw9AdHg"   // or by file ID
     ];
     monitorDriveFolderAndTriggerGitHub(FOLDER_ID, EXCLUDED_FILES, false, SNAPSHOT_PROPERTY_NAME, REPO_OWNER, REPO_NAME, EVENT_TYPE);
 }
