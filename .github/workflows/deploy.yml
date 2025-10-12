@@ -20,25 +20,14 @@ jobs:
       - name: Install clasp
         run: npm install -g @google/clasp
 
-      - name: Authenticate with credentials
+      - name: Authenticate with service account
         run: |
-          echo "${{ secrets.GOOGLE_CREDENTIALS }}" > credentials.json
+          echo '${{ secrets.GOOGLE_CREDENTIALS }}' > credentials.json
           clasp login --creds credentials.json
 
-      - name: Authenticate clasp
+      - name: Set clasp project
         run: |
-          cat << 'EOF' > ~/.clasprc.json
-          ${{ secrets.CLASP_CREDENTIALS }}
-          EOF
-
-          cat << 'EOF' > .clasp.json
-          ${{ secrets.CLASP_PROJECT }}
-          EOF
-
-      - name: Debug JSON
-        run: |
-          cat ~/.clasprc.json
-          cat .clasp.json
+          echo '${{ secrets.CLASP_PROJECT }}' > .clasp.json
 
       - name: Replace GitHub Token in code
         run: |
