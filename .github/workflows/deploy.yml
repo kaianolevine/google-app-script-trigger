@@ -20,6 +20,11 @@ jobs:
       - name: Install clasp
         run: npm install -g @google/clasp
 
+      - name: Authenticate with credentials
+        run: |
+          echo "${{ secrets.GOOGLE_CREDENTIALS }}" > credentials.json
+          clasp login --creds credentials.json
+
       - name: Authenticate clasp
         run: |
           cat << 'EOF' > ~/.clasprc.json
