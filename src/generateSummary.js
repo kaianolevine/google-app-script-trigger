@@ -1,4 +1,4 @@
-function updatedDjSets() {
+function generateNewSummary() {
     const FOLDER_ID = '1A0tKQ2DBXI1Bt9h--olFwnBNne3am-rL'; // Google Drive folder ID to monitor
     const SNAPSHOT_PROPERTY_NAME = 'summarySnapshot'; //Unique Snapshot Property Name
     const REPO_OWNER = 'kaianolevine'; //GitHub Repo Owner
