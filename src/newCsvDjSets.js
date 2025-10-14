@@ -7,5 +7,14 @@ function newCsvDjSets() {
     const EXCLUDED_FILES = [ // List of files to exclude (can be by name or by ID)
         ""
     ];
-    monitorDriveFolderAndTriggerGitHub(FOLDER_ID, EXCLUDED_FILES, true, SNAPSHOT_PROPERTY_NAME, REPO_OWNER, REPO_NAME, EVENT_TYPE);
+
+    try {
+        monitorDriveFolderAndTriggerGitHub(FOLDER_ID, EXCLUDED_FILES, true, SNAPSHOT_PROPERTY_NAME, REPO_OWNER, REPO_NAME, EVENT_TYPE);
+    } catch (e) {
+        if (e.message.includes("We're sorry")) {
+            console.warn("Transient Drive error, skipping this run:", e.message);
+            return;
+        }
+        throw e; // rethrow unexpected errors
+    }
 }
