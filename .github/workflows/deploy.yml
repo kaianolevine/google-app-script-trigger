@@ -24,14 +24,15 @@ jobs:
         run: |
           echo '${{ secrets.GOOGLE_CREDENTIALS }}' > credentials.json
           mkdir -p ~/.config
-          echo '{
-            "token": {
-              "type": "service_account",
-              "private_key": $(jq -r '.private_key' credentials.json | sed 's/\\n/\\n/g'),
-              "client_email": $(jq -r '.client_email' credentials.json)
-            },
-            "scriptId": "${{ secrets.SCRIPT_ID }}"
-          }' > ~/.clasprc.json
+          jq -n --argfile creds credentials.json --arg scriptId "${{ secrets.SCRIPT_ID }}" \
+            '{
+              token: {
+                type: "service_account",
+                private_key: $creds.private_key,
+                client_email: $creds.client_email
+              },
+              scriptId: $scriptId
+            }' > ~/.clasprc.json
 
       - name: Replace GitHub Token in code
         run: |
