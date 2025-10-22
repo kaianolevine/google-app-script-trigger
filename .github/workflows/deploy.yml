@@ -24,7 +24,7 @@ jobs:
         run: |
           echo '${{ secrets.GOOGLE_CREDENTIALS }}' > credentials.json
           mkdir -p ~/.config
-          jq -n --argfile creds credentials.json --arg scriptId "${{ secrets.SCRIPT_ID }}" \
+          jq -n --argjson creds "$(cat credentials.json)" --arg scriptId "${{ secrets.SCRIPT_ID }}" \
             '{
               token: {
                 type: "service_account",
