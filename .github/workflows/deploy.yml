@@ -20,19 +20,12 @@ jobs:
       - name: Install clasp
         run: npm install -g @google/clasp
 
-      - name: Setup clasp auth (service account)
+      - name: Setup clasp auth
+        run: echo '${{ secrets.CLASPRC_JSON }}' > ~/.clasprc.json
+
+      - name: Set clasp project
         run: |
-          echo '${{ secrets.GOOGLE_CREDENTIALS }}' > credentials.json
-          mkdir -p ~/.config
-          jq -n --argjson creds "$(cat credentials.json)" --arg scriptId "${{ secrets.SCRIPT_ID }}" \
-            '{
-              token: {
-                type: "service_account",
-                private_key: $creds.private_key,
-                client_email: $creds.client_email
-              },
-              scriptId: $scriptId
-            }' > ~/.clasprc.json
+          echo '${{ secrets.CLASP_PROJECT }}' > .clasp.json
 
       - name: Replace GitHub Token in code
         run: |
