@@ -23,7 +23,15 @@ jobs:
       - name: Setup clasp auth (service account)
         run: |
           echo '${{ secrets.GOOGLE_CREDENTIALS }}' > credentials.json
-          clasp login --creds credentials.json
+          mkdir -p ~/.config
+          echo '{
+            "token": {
+              "type": "service_account",
+              "private_key": $(jq -r '.private_key' credentials.json | sed 's/\\n/\\n/g'),
+              "client_email": $(jq -r '.client_email' credentials.json)
+            },
+            "scriptId": "${{ secrets.SCRIPT_ID }}"
+          }' > ~/.clasprc.json
 
       - name: Replace GitHub Token in code
         run: |
